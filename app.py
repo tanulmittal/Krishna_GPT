@@ -62,6 +62,14 @@ st.markdown("""
         width: 32px;
         height: 32px;
     }
+
+    .stChatMessage {
+        padding-left: 60px;  # Adjust as needed
+    }
+    .stChatMessage [data-testid="stImage"] {
+        margin-left: -60px;  # Should match the padding above
+    }
+
 </style>
 """, unsafe_allow_html=True)
 
