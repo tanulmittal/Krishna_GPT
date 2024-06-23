@@ -34,6 +34,7 @@ def get_response(user_query, chat_history):
         "user_question": user_query,
     })
 
+
 # Streamlit app
 st.title("Ask Krishna")
 
@@ -41,38 +42,46 @@ st.title("Ask Krishna")
 if "messages" not in st.session_state:
     st.session_state.messages = []
 
+st.markdown("""
+<style>
+    [data-testid="chatAvatarIcon-user"] svg {
+        display: none;
+    }
+    [data-testid="chatAvatarIcon-user"]::after {
+        content: url('https://raw.githubusercontent.com/tanulmittal/Krishna_GPT/main/user_avatar.png');
+        display: inline-block;
+        width: 32px;
+        height: 32px;
+    }
+    [data-testid="chatAvatarIcon-assistant"] svg {
+        display: none;
+    }
+    [data-testid="chatAvatarIcon-assistant"]::after {
+        content: url('https://raw.githubusercontent.com/tanulmittal/Krishna_GPT/main/krishna_avatar.png');
+        display: inline-block;
+        width: 32px;
+        height: 32px;
+    }
+</style>
+""", unsafe_allow_html=True)
+
 # Display chat messages from history on app rerun
 for message in st.session_state.messages:
     with st.chat_message(message["role"]):
-        col1, col2 = st.columns([1, 4])
-        with col1:
-            if message["role"] == "user":
-                st.image(user_image, width=50)
-            else:
-                st.image(krishna_image, width=50)
-        with col2:
-            st.markdown(message["content"])
+        st.markdown(message["content"])
 
 # React to user input
-if prompt := st.chat_input("Ask a question, Parth:"):
+if prompt := st.chat_input("Ask a question, Parth"):
     # Display user message in chat message container
     with st.chat_message("user"):
-        col1, col2 = st.columns([1, 4])
-        with col1:
-            st.image(user_image, width=50)
-        with col2:
-            st.markdown(prompt)
+        st.markdown(prompt)
     # Add user message to chat history
     st.session_state.messages.append({"role": "user", "content": prompt})
 
     # Generate streaming response
     chat_history = "\n".join([f"{m['role']}: {m['content']}" for m in st.session_state.messages])
     with st.chat_message("assistant"):
-        col1, col2 = st.columns([1, 4])
-        with col1:
-            st.image(krishna_image, width=50)
-        with col2:
-            response = st.write_stream(get_response(prompt, chat_history))
+        response = st.write_stream(get_response(prompt, chat_history))
 
     # Add assistant response to chat history
     st.session_state.messages.append({"role": "assistant", "content": response})
