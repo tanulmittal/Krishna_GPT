@@ -188,3 +188,9 @@ if prompt := st.chat_input("Ask a question, Parth"):
 
     # Add assistant response to chat history
     st.session_state.messages.append({"role": "assistant", "content": response, "avatar": krishna_avatar})
+
+# Add background music player
+st.sidebar.markdown("---")  # Add a separator
+st.sidebar.subheader("Background Music")
+audio_file = open("MusicBG.mp3", "rb")
+st.sidebar.audio(audio_file, format="audio/mp3")
